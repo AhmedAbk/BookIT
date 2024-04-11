@@ -5,10 +5,10 @@ const Packres = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedBook, setSelectedBook] = useState(null);
 
   useEffect(() => {
-    const fetchCity = async () => {
+    const fetchBook = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/books/${id} `);
         const data = await response.json();
@@ -16,36 +16,36 @@ const Packres = () => {
        
         console.log(data);
         if (response.ok) {
-          setSelectedCity(data);
+          setSelectedBook(data);
         } else {
           setError(`Error: ${data.message || 'Failed to fetch'}`);
         }
       } catch (error) {
-        setError(`Error fetching city: ${error.message || 'Unknown error'}`);
+        setError(`Error fetching Book: ${error.message || 'Unknown error'}`);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCity();
+    fetchBook();
     
   }, [id]);
 
-  const renderCityDetails = () => {
-    if (selectedCity) {
+  const renderBookDetails = () => {
+    if (selectedBook) {
       return (
         <div className="container mt-5">
           <div className="row">
             <div className="col-md-6 mb-4">
-              <img src={selectedCity.bimage} className="img-fluid" alt={selectedCity.bname} />
+              <img src={selectedBook.bimage} className="img-fluid" alt={selectedBook.bname} />
             </div>
             <div className="col-md-6">
-              <h2 className="mb-4">{selectedCity.bname}</h2>
-              <p>{selectedCity.bdesc}</p>
+              <h2 className="mb-4">{selectedBook.bname}</h2>
+              <p>{selectedBook.bdesc}</p>
               <h4 className="mt-4">book Details:</h4>
               <ul>
-                <li>author: {selectedCity.author}</li>
-                <li>Prices starting from {selectedCity.prices} $</li>
+                <li>author: {selectedBook.author}</li>
+                <li>Prices starting from {selectedBook.prices} $</li>
               </ul>
               <Link to='/Reg'>
               <button className="btn btn-primary mt-3"  >
@@ -70,8 +70,8 @@ const Packres = () => {
             <p>Loading...</p>
           ) : (
             <div>
-              {renderCityDetails() || (
-                <p>Error: {error || 'City not found'}</p>
+              {renderBookDetails() || (
+                <p>Error: {error || 'Book not found'}</p>
                 
               )}
             </div>
