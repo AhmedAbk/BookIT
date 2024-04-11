@@ -21,7 +21,7 @@ function Dest() {
   }, []);
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category.catid);
+    setSelectedCategory(category);
   };
 
   return (
@@ -58,11 +58,7 @@ function Dest() {
           </div>
         </div>
       </div>
-      {selectedCategory && (
-        <Link to={`/Dest/${selectedCategory}`} className="text-decoration-none">
-          <Destres categoryId={selectedCategory} />
-        </Link>
-      )}
+      {selectedCategory && <Destres /> }
     </div>
   );
 }

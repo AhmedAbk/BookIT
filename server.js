@@ -100,7 +100,17 @@ app.get('/api/books/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
+app.get("/api/bookes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('SELECT * FROM books b,categories c WHERE c.catid=b.bid and b.bid = $1', [id]);
+    
+    res.json({ data: result.rows });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 // Add a new book
 app.post('/api/books', async (req, res) => {
   const { bname, bimage, bprice, pdesc, brating, breviews, catid, author, pyear } = req.body;
