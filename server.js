@@ -36,7 +36,7 @@ app.use(express.json());
 
 
 // Get all categories
-app.get('/api/categories', async (req, res) => {
+app.get('/api/allcategories', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM categories');
     res.json({ data: result.rows });

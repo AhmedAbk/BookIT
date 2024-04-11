@@ -1,108 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-const Destres = () => {
-  const { id } = useParams();
+const Destres = ({ categoryId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [destination, setDestination] = useState(null);
+  const [books, setBooks] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedCity, setSelectedCity] = useState(' ');
+  const [selectedBook, setSelectedBook] = useState(null);
 
   useEffect(() => {
-    const fetchDestination = async () => {
+    const fetchBooks = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/cities/${id}`);
+        const response = await fetch(`http://localhost:3001/api/books/${categoryId}`);
         const data = await response.json();
 
-        console.log(id);
+        console.log(categoryId);
         console.log(data);
 
         if (response.ok) {
-          setDestination(data);
+          setBooks(data.data);
         } else {
           setError(`Error: ${data.message || 'Failed to fetch'}`);
         }
       } catch (error) {
-        setError(`Error fetching destination: ${error.message || 'Unknown error'}`);
+        setError(`Error fetching Books: ${error.message || 'Unknown error'}`);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDestination();
-  }, [id]);
+    fetchBooks();
+  }, [categoryId]);
 
-  const openModal = (city) => {
+  const openModal = (book) => {
     setShowModal(true);
-    setSelectedCity(city);
+    setSelectedBook(book);
   };
 
   const closeModal = () => {
     setShowModal(false);
-  };
-
-  const getCityInformation = (city) => {
-    const { data } = destination || {};
-  
-    if (data && Array.isArray(data)) { 
-      return data.map((cityData, index) => {
-        if (cityData.name === city) {
-          return (
-            <div key={index}> 
-              <img className="img-fluid" src={cityData.image} alt={`${cityData.name}`} />
-              <div className="p-4">
-                <div className="d-flex justify-content-between mb-3">
-                  <small className="m-0"><i className="fa fa-map-marker-alt text-primary mr-2" />{cityData.name}</small>
-                  <small className="m-0"><i className="fa fa-calendar-alt text-primary mr-2" />{cityData.duration}</small>
-                  <small className="m-0"><i className="fa fa-user text-primary mr-2" />{cityData.person}</small>
-                </div>
-                <a className="h5 text-decoration-none">{cityData.description}</a>
-                <div className="border-top mt-4 pt-4">
-                  <div className="d-flex justify-content-between">
-                    <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{cityData.rating} <small>({cityData.reviews})</small></h6>
-                    <h5 className="m-0"> $ {cityData.prices}</h5>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        }
-      });
-    } else if (data) {
-      // one city
-      const { image, prices, description, duration, person, rating, reviews, name } = data;
-  
-      if (name === city) {
-        return (
-          <>
-            <img className="img-fluid" src={image} alt={`${name}`} />
-            <div className="p-4">
-              <div className="d-flex justify-content-between mb-3">
-                <small className="m-0"><i className="fa fa-map-marker-alt text-primary mr-2" />{name}</small>
-                <small className="m-0"><i className="fa fa-calendar-alt text-primary mr-2" />{duration}</small>
-                <small className="m-0"><i className="fa fa-user text-primary mr-2" />{person}</small>
-              </div>
-              <a className="h5 text-decoration-none">{description}</a>
-              <div className="border-top mt-4 pt-4">
-                <div className="d-flex justify-content-between">
-                  <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{rating} <small>{reviews}</small></h6>
-                  <h5 className="m-0">{prices}</h5>
-                </div>
-              </div>
-            </div>
-  
-            <Link to="/Login">
-              <button className="btn btn-primary">Book Now</button>
-            </Link>
-          </>
-        );
-      } else {
-        return `Information about ${city}.`;
-      }
-    } else {
-      return `Information about ${city}.`;
-    }
   };
 
   return (
@@ -117,22 +53,22 @@ const Destres = () => {
             <p>Loading...</p>
           ) : (
             <div className="row">
-              {destination?.data?.map((cityData, index) => (
-                <div className="col-lg-4 col-md-6 mb-4" key={index} onClick={() => openModal(cityData.name)}>
+              {books.map((book, index) => (
+                <div className="col-lg-4 col-md-6 mb-4" key={index} onClick={() => openModal(book)}>
                   <div className="package-item bg-white mb-2"> 
-                    <img className="img-fluid" src={cityData.image} 
+                    <img className="img-fluid" src={book.bimage} 
                       style={{ width: '100%', height: '250px', objectFit: 'cover' }}/>
                     <div className="p-4">
                       <div className="d-flex justify-content-between mb-3">
-                        <small className="m-0"><i className="fa fa-map-marker-alt text-primary mr-2" />{cityData.name}</small>
-                        <small className="m-0"><i className="fa fa-calendar-alt text-primary mr-2" />{cityData.duration}</small>
-                        <small className="m-0"><i className="fa fa-user text-primary mr-2" />{cityData.person}</small>
+                        <small className="m-0"><i className="fa fa-map-marker-alt text-primary mr-2" />{book.bname}</small>
+                        <small className="m-0"><i className="fa fa-calendar-alt text-primary mr-2" />{book.pyear}</small>
+                        <small className="m-0"><i className="fa fa-user text-primary mr-2" />{book.author}</small>
                       </div>
-                      <a className="h5 text-decoration-none"> Visit {cityData.name}</a>
+                      <a className="h5 text-decoration-none"> Visit {book.bname}</a>
                       <div className="border-top mt-4 pt-4">
                         <div className="d-flex justify-content-between">
-                          <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{cityData.rating} <small>({cityData.reviews})</small></h6>
-                          <h5 className="m-0">$ {cityData.prices}</h5>
+                          <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{book.brating} <small>({book.breviews})</small></h6>
+                          <h5 className="m-0">$ {book.prices}</h5>
                         </div>
                       </div>
                     </div>
@@ -151,18 +87,28 @@ const Destres = () => {
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">{selectedCity} Information</h5>
+                <h5 className="modal-title">{selectedBook.bname} Information</h5>
                 <button type="button" className="close" onClick={closeModal}>
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div className="modal-body">
-                {getCityInformation(selectedCity)}
-                <Link to='/Res'>
-              <button className="btn btn-primary mt-3"  >
-                book now
-              </button>
-              </Link>
+                {/* Display Book Information */}
+                <img className="img-fluid" src={selectedBook.bimage} alt={selectedBook.bname} />
+                <div className="p-4">
+                  <div className="d-flex justify-content-between mb-3">
+                    <small className="m-0"><i className="fa fa-map-marker-alt text-primary mr-2" />{selectedBook.bname}</small>
+                    <small className="m-0"><i className="fa fa-calendar-alt text-primary mr-2" />{selectedBook.pyear}</small>
+                    <small className="m-0"><i className="fa fa-user text-primary mr-2" />{selectedBook.author}</small>
+                  </div>
+                  <p>{selectedBook.pdesc}</p>
+                  <div className="border-top mt-4 pt-4">
+                    <div className="d-flex justify-content-between">
+                      <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{selectedBook.brating} <small>({selectedBook.breviews})</small></h6>
+                      <h5 className="m-0">$ {selectedBook.prices}</h5>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

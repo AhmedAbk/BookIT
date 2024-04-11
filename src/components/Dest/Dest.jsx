@@ -9,7 +9,7 @@ function Dest() {
   useEffect(() => {
     const fetchcategories = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/categories');
+        const response = await fetch('http://localhost:3001/api/allcategories');
         const data = await response.json();
         setcategories(data.data);
       } catch (error) {
@@ -34,6 +34,7 @@ function Dest() {
             </h6>
             <h1>Explore Top categories</h1>
           </div>
+          <Link to={`/Dest/${categories.catid}`}>
           <div className="row">
             {categories.map((categories) => (
               <div className="col-lg-4 col-md-6 mb-4" key={categories.catid}>
@@ -41,7 +42,7 @@ function Dest() {
                   className="destination-item position-relative overflow-hidden mb-2"
                   onClick={() => handlecategoriesClick(categories)}
                 > 
-                  <Link to={`/Dest/${categories.catid}`}>
+          
                     <img
                       className="img-fluid"
                       src={categories.catimage}
@@ -50,15 +51,16 @@ function Dest() {
                     />
                    
                   
-                  </Link>
                   <div className="destination-overlay text-white text-decoration-none">
                       <h5 className="text-white">{categories.catname}</h5>
                     </div>
                   </div>
                 </div>
             
+   
             ))}
           </div>
+          </Link>
         </div>
       </div> 
       {selectedcategories && <Destres />}
