@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login/Login.jsx';
 import Home from './components/Home/home.jsx'; 
 import Dash from './components/Dashboard/Dash.jsx';  
-import Destres from './components/Dest/destres.jsx'; 
+import Destres from './components/Dest/Destres.jsx';
 import Packres from './components/Pack/Packres.jsx';
 import AddCity from './components/admin/add.jsx';
 import AddDest from './components/admin/add dest.jsx';

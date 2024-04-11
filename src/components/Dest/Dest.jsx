@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Destres from './destres';
+import { useParams, Link } from 'react-router-dom';
+import Destres from './Destres';
 
 function Dest() {
-  const [categories, setcategories] = useState([]);
-  const [selectedcategories, setSelectedcategories] = useState(null);
-  
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   useEffect(() => {
-    const fetchcategories = async () => {
+    const fetchCategories = async () => {
       try {
         const response = await fetch('http://localhost:3001/api/allcategories');
         const data = await response.json();
-        setcategories(data.data);
+        setCategories(data.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
     };
 
-    fetchcategories();
+    fetchCategories();
   }, []);
 
-  const handlecategoriesClick = (categories) => {
-    setSelectedcategories(categories);
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category.catid);
   };
 
   return (
@@ -30,40 +30,39 @@ function Dest() {
         <div className="container pt-5 pb-3">
           <div className="text-center mb-3 pb-3">
             <h6 className="text-primary text-uppercase" style={{ letterSpacing: '5px' }}>
-              categories
+              Categories
             </h6>
-            <h1>Explore Top categories</h1>
+            <h1>Explore Top Categories</h1>
           </div>
-          <Link to={`/Dest/${categories.catid}`}>
           <div className="row">
-            {categories.map((categories) => (
-              <div className="col-lg-4 col-md-6 mb-4" key={categories.catid}>
-                <div
-                  className="destination-item position-relative overflow-hidden mb-2"
-                  onClick={() => handlecategoriesClick(categories)}
-                > 
-          
+            {categories.map((category) => (
+              <div className="col-lg-4 col-md-6 mb-4" key={category.catid}>
+                <Link to={`/Dest/${category.catid}`} className="text-decoration-none">
+                  <div
+                    className="destination-item position-relative overflow-hidden mb-2"
+                    onClick={() => handleCategoryClick(category)}
+                  >
                     <img
                       className="img-fluid"
-                      src={categories.catimage}
+                      src={category.catimage}
                       style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-                      alt={categories.catname}
+                      alt={category.catname}
                     />
-                   
-                  
-                  <div className="destination-overlay text-white text-decoration-none">
-                      <h5 className="text-white">{categories.catname}</h5>
+                    <div className="destination-overlay text-white text-decoration-none">
+                      <h5 className="text-white">{category.catname}</h5>
                     </div>
                   </div>
-                </div>
-            
-   
+                </Link>
+              </div>
             ))}
           </div>
-          </Link>
         </div>
-      </div> 
-      {selectedcategories && <Destres />}
+      </div>
+      {selectedCategory && (
+        <Link to={`/Dest/${selectedCategory}`} className="text-decoration-none">
+          <Destres categoryId={selectedCategory} />
+        </Link>
+      )}
     </div>
   );
 }

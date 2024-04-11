@@ -10,7 +10,7 @@ const Packres = () => {
   useEffect(() => {
     const fetchCity = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/test/${id}`);
+        const response = await fetch(`http://localhost:3001/api/books/${id} `);
         const data = await response.json();
         console.log(id);
        
@@ -37,19 +37,19 @@ const Packres = () => {
         <div className="container mt-5">
           <div className="row">
             <div className="col-md-6 mb-4">
-              <img src={selectedCity.image} className="img-fluid" alt={selectedCity.name} />
+              <img src={selectedCity.bimage} className="img-fluid" alt={selectedCity.bname} />
             </div>
             <div className="col-md-6">
-              <h2 className="mb-4">{selectedCity.name}</h2>
-              <p>{selectedCity.description}</p>
-              <h4 className="mt-4">Package Details:</h4>
+              <h2 className="mb-4">{selectedCity.bname}</h2>
+              <p>{selectedCity.bdesc}</p>
+              <h4 className="mt-4">book Details:</h4>
               <ul>
-                <li>Duration: {selectedCity.duration}</li>
+                <li>author: {selectedCity.author}</li>
                 <li>Prices starting from {selectedCity.prices} $</li>
               </ul>
               <Link to='/Reg'>
               <button className="btn btn-primary mt-3"  >
-                book now
+                read now
               </button>
               </Link>
             </div>
