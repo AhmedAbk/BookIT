@@ -12,7 +12,7 @@ const Destres = () => {
   useEffect(() => {
     const fetchDestination = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/bookes/${id}`);
+        const response = await fetch(`http://localhost:3001/api/books/${id}`);
         const data = await response.json();
 
         console.log(id);

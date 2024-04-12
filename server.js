@@ -86,24 +86,11 @@ app.get('/api/books', async (req, res) => {
 });
 
 // Get book by ID
-app.get('/api/books/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const result = await pool.query('SELECT * FROM books b,categories c WHERE c.catid=b.bid and b.bid = $1', [id]);
-    if (result.rows.length > 0) {
-      res.json(result.rows[0]); 
-    } else {
-      res.status(404).json({ error: 'Book not found' });
-    }
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-app.get("/api/bookes/:id", async (req, res) => {
+ 
+app.get("/api/books/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query('SELECT * FROM books b,categories c WHERE c.catid=b.bid and b.bid = $1', [id]);
+    const result = await pool.query('SELECT * FROM books b,categories c WHERE c.catid=b.catid and b.catid = $1', [id]);
     
     res.json({ data: result.rows });
   } catch (error) {

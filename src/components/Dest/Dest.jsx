@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Destres from './Destres';
+import Destres from './destres';
 
 function Dest() {
   const [categories, setCategories] = useState([]);
