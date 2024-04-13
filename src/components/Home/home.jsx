@@ -7,8 +7,10 @@ function Home() {
   return (
     <div> 
        <Dest/>
+       
         <Search/>
         <Pack/>
+       
        <Foot/>
     </div>
   )
