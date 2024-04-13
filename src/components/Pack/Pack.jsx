@@ -30,9 +30,9 @@ function Pack() {
         <div className="container pt-5 pb-3">
           <div className="text-center mb-3 pb-3">
             <h6 className="text-primary text-uppercase" style={{ letterSpacing: '5px' }}>
-              Packages
+              Books
             </h6>
-            <h1>Read all categories</h1>
+            <h1>Read all books</h1>
           </div>
           <div className="row">
             {books.map((book) => (

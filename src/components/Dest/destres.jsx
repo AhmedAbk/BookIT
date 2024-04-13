@@ -60,7 +60,7 @@ const Destres = () => {
                 <div className="border-top mt-4 pt-4">
                   <div className="d-flex justify-content-between">
                     <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{cityData.brating} <small>({cityData.breviews})</small></h6>
-                    <h5 className="m-0"> $ {cityData.prices}</h5>
+                    <h5 className="m-0"> $ {cityData.bprice}</h5>
                   </div>
                 </div>
               </div>
@@ -130,7 +130,7 @@ const Destres = () => {
                       <div className="border-top mt-4 pt-4">
                         <div className="d-flex justify-content-between">
                           <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{cityData.brating} <small>({cityData.breviews})</small></h6>
-                          <h5 className="m-0">$ {cityData.prices}</h5>
+                          <h5 className="m-0">$ {cityData.bprice}</h5>
                         </div>
                       </div>
                     </div>
