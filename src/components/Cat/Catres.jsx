@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-const Destres = () => {
+const Catres = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -60,7 +60,7 @@ const Destres = () => {
                 <div className="border-top mt-4 pt-4">
                   <div className="d-flex justify-content-between">
                     <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{bookData.brating} <small>({bookData.breviews})</small></h6>
-                    <h5 className="m-0"> $ {bookData.prices}</h5>
+                    <h5 className="m-0"> $ {bookData.bprice}</h5>
                   </div>
                 </div>
               </div>
@@ -131,7 +131,7 @@ const Destres = () => {
                       <div className="border-top mt-4 pt-4">
                         <div className="d-flex justify-content-between">
                           <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{bookData.brating} <small>({bookData.breviews})</small></h6>
-                          <h5 className="m-0">$ {bookData.prices}</h5>
+                          <h5 className="m-0">$ {bookData.bprice}</h5>
                         </div>
                       </div>
                     </div>
@@ -172,4 +172,4 @@ const Destres = () => {
   );
 };
 
-export default Destres;
+export default Catres;
