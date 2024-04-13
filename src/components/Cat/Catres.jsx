@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-const Destres = () => {
+const Catres = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -172,4 +172,4 @@ const Destres = () => {
   );
 };
 
-export default Destres;
+export default Catres;
