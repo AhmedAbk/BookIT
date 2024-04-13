@@ -86,7 +86,25 @@ app.get('/api/books', async (req, res) => {
 });
 
 // Get book by ID
- 
+// Backend endpoint
+app.get("/api/bookes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query('SELECT * FROM books WHERE bid = $1', [id]);
+    
+    // Check if any book is found with the given ID
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
+    // Return the book details
+    res.json(result.rows[0]); // Assuming only one book will be found
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.get("/api/books/:id", async (req, res) => {
   try {
     const { id } = req.params;

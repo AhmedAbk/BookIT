@@ -10,7 +10,7 @@ const Packres = () => {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/books/${id} `);
+        const response = await fetch(`http://localhost:3001/api/bookes/${id} `);
         const data = await response.json();
         console.log(id);
        
