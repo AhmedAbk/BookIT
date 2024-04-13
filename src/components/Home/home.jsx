@@ -1,5 +1,5 @@
 import React from 'react' 
-import Dest from '../Cat/Cat' 
+import Dest from '../Dest/Dest' 
 import Search from '../Search/Search'
 import Foot from '../Footer/Foot'
 import Pack from '../Pack/Pack'

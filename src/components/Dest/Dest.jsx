@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Catres from './Cat';
-function Cat() {
+import Destres from './destres';
+
+function Dest() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -36,7 +37,7 @@ function Cat() {
           <div className="row">
             {categories.map((category) => (
               <div className="col-lg-4 col-md-6 mb-4" key={category.catid}>
-                <Link to={`/Cat/${category.catid}`} className="text-decoration-none">
+                <Link to={`/Dest/${category.catid}`} className="text-decoration-none">
                   <div
                     className="destination-item position-relative overflow-hidden mb-2"
                     onClick={() => handleCategoryClick(category)}
@@ -57,9 +58,9 @@ function Cat() {
           </div>
         </div>
       </div>
-      {selectedCategory && <Catres /> }
+      {selectedCategory && <Destres /> }
     </div>
   );
 }
 
-export default Cat;
+export default Dest;
