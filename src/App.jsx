@@ -11,7 +11,7 @@ import Dash from './components/Dashboard/Dash.jsx';
 import Destres from './components/Dest/Destres.jsx';
 import Packres from './components/Pack/Packres.jsx';
 import AddCity from './components/admin/add.jsx';
-import AddDest from './components/admin/add dest.jsx';
+import AddDest from './components/admin/adddest.jsx';
 import GetAllDestinations from './components/admin/getalldest.jsx'; 
 import GetAllcity from './components/admin/getallcity.jsx';
 import Res from './components/res/res.jsx';
