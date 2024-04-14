@@ -152,14 +152,45 @@ app.get('/api/users/:id', async (req, res) => {
 });
 
 // Add a new user
-app.post('/api/users', async (req, res) => {
+app.post('/api/register', async (req, res) => {
   const { name, phone, cin, email, pass } = req.body;
-  try {
-    const result = await pool.query('INSERT INTO "user" (name, phone, cin, email, pass) VALUES ($1, $2, $3, $4, $5) RETURNING *', [name, phone, cin, email, pass]);
-    res.status(201).json(result.rows[0]);
+
+  try { 
+    const emailCheck = await pool.query('SELECT * FROM buser WHERE email = $1', [email]);
+    if (emailCheck.rows.length > 0) {
+      return res.status(400).json({ error: 'Email already exists' });
+    }
+ 
+    const cinCheck = await pool.query('SELECT * FROM buser WHERE cin = $1', [cin]);
+    if (cinCheck.rows.length > 0) {
+      return res.status(400).json({ error: 'CIN already exists' });
+    } 
+    const newUser = await pool.query(
+      'INSERT INTO buser (name, phone, cin, email, pass) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [name, phone, cin, email, pass]
+    );
+
+    res.status(201).json({ message: 'User registered successfully', user: newUser.rows[0] });
   } catch (error) {
-    console.error('Error adding user:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error registering user:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
+ 
+app.get('/api/user/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    const result = await pool.query('SELECT email, pass FROM buser WHERE email = $1', [email]);
+
+    if (result.rows.length > 0) {
+      const userData = result.rows[0];
+      res.json({ data: userData });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});

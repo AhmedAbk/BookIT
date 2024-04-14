@@ -118,23 +118,8 @@ function Reg()
                         value={value.pass}
                         onChange={(e) => setValue({ ...value, pass: e.target.value })}
                       />
-                    </div>
-                    <div className="form-group">
-                      Married
-                      <input
-                        type="checkbox"
-                        checked={value.married}
-                        className="form-control p-4"
-                        onChange={() => setValue({ ...value, married: !value.married })}
-                      />
-                      Single
-                      <input
-                        type="checkbox"
-                        checked={value.single}
-                        className="form-control p-4"
-                        onChange={() => setValue({ ...value, single: !value.single })}
-                      />
-                    </div>
+                    </div> 
+               
                     <div className="form-group">
                       You already have an account, <Link to="/Login"> Click Here</Link>
                     </div>

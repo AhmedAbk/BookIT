@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate hook directly from react-router-dom
 import { Link } from 'react-router-dom';
+
 const Packres = () => {
   const { id } = useParams();
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/bookes/${id} `);
+        const response = await fetch(`http://localhost:3001/api/bookes/${id}`);
         const data = await response.json();
         console.log(id);
-       
         console.log(data);
         if (response.ok) {
           setSelectedBook(data);
@@ -28,8 +30,21 @@ const Packres = () => {
     };
 
     fetchBook();
-    
+
   }, [id]);
+
+  useEffect(() => {
+    const isLoggedInStorage = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(isLoggedInStorage === 'true');
+  }, []);
+
+  const handleReadNow = () => {
+    if (isLoggedIn) {
+      navigate('/Res'); // Redirect to /Res if logged in
+    } else {
+      navigate('/Login'); // Redirect to /Reg if not logged in
+    }
+  };
 
   const renderBookDetails = () => {
     if (selectedBook) {
@@ -47,11 +62,9 @@ const Packres = () => {
                 <li>author: {selectedBook.author}</li>
                 <li>Prices starting from {selectedBook.prices} $</li>
               </ul>
-              <Link to='/Reg'>
-              <button className="btn btn-primary mt-3"  >
+              <button className="btn btn-primary mt-3" onClick={handleReadNow}>
                 read now
               </button>
-              </Link>
             </div>
           </div>
         </div>
@@ -72,7 +85,6 @@ const Packres = () => {
             <div>
               {renderBookDetails() || (
                 <p>Error: {error || 'Book not found'}</p>
-                
               )}
             </div>
           )}
