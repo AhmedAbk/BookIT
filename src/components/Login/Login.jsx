@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
   const [value, setValue] = useState({ mail: '', password: '' });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is already logged in from local storage
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const notifySuccessed = () => {
     toast.success("Login successful!", {
@@ -30,6 +39,9 @@ function Login() {
 
         if (userData.data) {
           if (value.password === userData.data.pass) {
+            // Store user data in local storage
+            localStorage.setItem('userData', JSON.stringify(userData.data));
+            setIsLoggedIn(true);
             notifySuccessed();
             console.log('Login successful');
             navigate('/');
@@ -55,12 +67,12 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-      <div className="container-fluid bg-registration py-5" style={{ margin: '90px 0', backgroundImage: `url(https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="container-fluid bg-registration py-5" style={{ margin: '90px 0' }}>
         <div className="container py-5">
           <div className="row align-items-center">
-          <div className="col-lg-7 mb-5 mb-lg-0 bg-white rounded p-4" style={{opacity: 0.9}} >
-              <p className="text-black">Create An Account now !!!</p>
-              <ul className="list-inline text-black m-0">
+            <div className="col-lg-7 mb-5 mb-lg-0">
+              <p className="text-white">Create An Account now !!!</p>
+              <ul className="list-inline text-white m-0">
                 <li className="py-2">
                   <i className="fa fa-check text-primary mr-3" />Free
                 </li>
@@ -72,43 +84,44 @@ function Login() {
             <div className="col-lg-5">
               <div className="card border-0">
                 <div className="card-header bg-primary text-center p-4">
-                  <h1 className="text-white m-0">Login Now</h1>
+                  <h1 className="text-white m-0">   Login Now </h1>
                 </div>
                 <div className="card-body rounded-bottom bg-white p-5">
-                  <form>
-                    <div className="form-group">
-                      <input
-                        type="email"
-                        className="form-control p-4"
-                        placeholder="Your email"
-                        required="required"
-                        value={value.mail}
-                        onChange={(e) => setValue({ mail: e.target.value, password: '' })}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        type="password"
-                        className="form-control p-4"
-                        placeholder="Password"
-                        required="required"
-                        value={value.password}
-                        onChange={(e) => setValue({ ...value, password: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <button
-                        className="btn btn-primary btn-block py-3"
-                        type="button"
-                        onClick={handleLogin}
-                      >
-                        Login Now
-                      </button>
-                    </div>
-                    <div className="form-group">
-                      You don't have an account, <Link to="/Reg"> Click Here</Link>
-                    </div>
-                  </form>
+                    <form>
+                      <div className="form-group">
+                        <input
+                          type="email"
+                          className="form-control p-4"
+                          placeholder="Your email"
+                          required="required"
+                          value={value.mail}
+                          onChange={(e) => setValue({ mail: e.target.value, password: '' })}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <input
+                          type="password"
+                          className="form-control p-4"
+                          placeholder="Password"
+                          required="required"
+                          value={value.password}
+                          onChange={(e) => setValue({ ...value, password: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <button
+                          className="btn btn-primary btn-block py-3"
+                          type="button"
+                          onClick={handleLogin}
+                        >
+                          Login Now
+                        </button>
+                      </div>
+                      <div className="form-group">
+                        You don't have an account, <Link to="/Reg"> Click Here</Link>
+                      </div>
+                    </form>
+
                 </div>
               </div>
               <br />

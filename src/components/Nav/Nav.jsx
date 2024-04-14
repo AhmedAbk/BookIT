@@ -31,7 +31,7 @@ function Nav() {
                   <Link to="/Pack">Books</Link>
                 </li>
                 <li className="nav-item nav-link">
-                  <Link to="/Dest">Categories</Link>
+                  <Link to="/Cat">Categories</Link>
                 </li>
                 <li className="nav-item nav-link">
                   <Link to="/Login">Login</Link>
