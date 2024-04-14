@@ -1,8 +1,29 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Nav() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the localStorage contains the key indicating user login
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    // Remove user data from localStorage
+    localStorage.removeItem('userData');
+    // Update isLoggedIn state
+    setIsLoggedIn(false);
+    // Redirect user to the home page
+    navigate('/');
+  };
+
   return (
     <div>
       {/* Navbar Start */}
@@ -21,11 +42,8 @@ function Nav() {
 
             <div className="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
               <ul className="navbar-nav ml-auto py-0">
-               
                 <li className="nav-item nav-link">
-                  <Link to="/Cart">
-                    Cart
-                  </Link>
+                  <Link to="/Cart">Cart</Link>
                 </li>
                 <li className="nav-item nav-link">
                   <Link to="/Pack">Books</Link>
@@ -34,9 +52,16 @@ function Nav() {
                   <Link to="/Cat">Categories</Link>
                 </li>
                 <li className="nav-item nav-link">
-                  <Link to="/Login">Login</Link>
+                  {isLoggedIn ? (
+                    <Link to="/"  onClick={handleLogout}>
+                      Logout
+                    </Link>
+                  ) : (
+                    <Link to="/Login"  >
+                      Login
+                    </Link>
+                  )}
                 </li>
-            
               </ul>
             </div>
           </nav>
