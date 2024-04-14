@@ -1,22 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 const Catres = () => {
+
   const { id } = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [Book, setBook] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [selectedbook, setSelectedbook] = useState(' ');
+  const [selectedbook, setSelectedbook] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const userData = localStorage.getItem('userData');
+    setIsLoggedIn(!!userData); // Set isLoggedIn to true if userData exists in localStorage
+  }, []);
+
+  const handleReadNow = () => {
+    if (isLoggedIn) {
+      navigate('/Res');
+    } else {
+      navigate('/Login');
+    }
+  };
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/books/${id}`);
         const data = await response.json();
-
-        console.log(id);
-        console.log(data);
 
         if (response.ok) {
           setBook(data);
@@ -44,13 +57,13 @@ const Catres = () => {
 
   const getbookInformation = (book) => {
     const { data } = Book || {};
-  
-    if (data && Array.isArray(data)) { 
+
+    if (data && Array.isArray(data)) {
       return data.map((bookData, index) => {
         if (bookData.bname === book) {
           return (
-            <div key={index}> 
-              <img className="img-fluid" src={bookData.bimage} alt={`${bookData.bname}`} />
+            <div key={index}>
+              <img className="img-fluid" src={bookData.bimage} alt={bookData.bname} />
               <div className="p-4">
                 <div className="d-flex justify-content-between mb-3">
                   <small className="m-0"><i className="fa fa-map-marker-alt text-primary mr-2" />{bookData.bname}</small>
@@ -60,7 +73,7 @@ const Catres = () => {
                 <div className="border-top mt-4 pt-4">
                   <div className="d-flex justify-content-between">
                     <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{bookData.brating} <small>({bookData.breviews})</small></h6>
-                    <h5 className="m-0"> $ {bookData.prices}</h5>
+                    <h5 className="m-0"> $ {bookData.bprice}</h5>
                   </div>
                 </div>
               </div>
@@ -69,13 +82,13 @@ const Catres = () => {
         }
       });
     } else if (data) {
-      // one  
+      // one book
       const { bimage, prices, pdesc, duration, author, rating, breviews, name } = data;
-  
+
       if (name === book) {
         return (
           <>
-            <img className="img-fluid" src={bimage} alt={`${name}`} />
+            <img className="img-fluid" src={bimage} alt={name} />
             <div className="p-4">
               <div className="d-flex justify-content-between mb-3">
                 <small className="m-0"><i className="fa fa-map-marker-alt text-primary mr-2" />{name}</small>
@@ -90,10 +103,8 @@ const Catres = () => {
                 </div>
               </div>
             </div>
-  
-            <Link to="/Login">
-              <button className="btn btn-primary">Book Now</button>
-            </Link>
+
+            <button className="btn btn-primary" onClick={handleReadNow}>Read Now</button>
           </>
         );
       } else {
@@ -118,9 +129,8 @@ const Catres = () => {
             <div className="row">
               {Book?.data?.map((bookData, index) => (
                 <div className="col-lg-4 col-md-6 mb-4" key={index} onClick={() => openModal(bookData.bname)}>
-                  <div className="package-item bg-white mb-2"> 
-                    <img className="img-fluid" src={bookData.bimage} 
-                      style={{ width: '100%', height: '250px', objectFit: 'cover' }}/>
+                  <div className="package-item bg-white mb-2">
+                    <img className="img-fluid" src={bookData.bimage} style={{ width: '100%', height: '250px', objectFit: 'cover' }} />
                     <div className="p-4">
                       <div className="d-flex justify-content-between mb-3">
                         <small className="m-0"><i className="fa fa-map-marker-alt text-primary mr-2" />{bookData.bname}</small>
@@ -131,7 +141,7 @@ const Catres = () => {
                       <div className="border-top mt-4 pt-4">
                         <div className="d-flex justify-content-between">
                           <h6 className="m-0"><i className="fa fa-star text-primary mr-2" />{bookData.brating} <small>({bookData.breviews})</small></h6>
-                          <h5 className="m-0">$ {bookData.prices}</h5>
+                          <h5 className="m-0">$ {bookData.bprice}</h5>
                         </div>
                       </div>
                     </div>
@@ -157,11 +167,9 @@ const Catres = () => {
               </div>
               <div className="modal-body">
                 {getbookInformation(selectedbook)}
-                <Link to='/Res'>
-              <button className="btn btn-primary mt-3"  >
-                book now
-              </button>
-              </Link>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-primary mt-3" onClick={handleReadNow}>Read Now</button>
               </div>
             </div>
           </div>

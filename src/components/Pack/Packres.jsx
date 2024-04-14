@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate hook directly from react-router-dom
+import { useParams, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const Packres = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/bookes/${id}`);
         const data = await response.json();
-        console.log(id);
-        console.log(data);
         if (response.ok) {
           setSelectedBook(data);
         } else {
@@ -34,15 +32,15 @@ const Packres = () => {
   }, [id]);
 
   useEffect(() => {
-    const isLoggedInStorage = localStorage.getItem('isLoggedIn');
-    setIsLoggedIn(isLoggedInStorage === 'true');
+    const userData = localStorage.getItem('userData');
+    setIsLoggedIn(!!userData); // Set isLoggedIn to true if userData exists in localStorage
   }, []);
 
   const handleReadNow = () => {
     if (isLoggedIn) {
-      navigate('/Res'); // Redirect to /Res if logged in
+      navigate('/Res');
     } else {
-      navigate('/Login'); // Redirect to /Reg if not logged in
+      navigate('/Login');
     }
   };
 
@@ -57,13 +55,13 @@ const Packres = () => {
             <div className="col-md-6">
               <h2 className="mb-4">{selectedBook.bname}</h2>
               <p>{selectedBook.bdesc}</p>
-              <h4 className="mt-4">book Details:</h4>
+              <h4 className="mt-4">Book Details:</h4>
               <ul>
-                <li>author: {selectedBook.author}</li>
+                <li>Author: {selectedBook.author}</li>
                 <li>Prices starting from {selectedBook.prices} $</li>
               </ul>
               <button className="btn btn-primary mt-3" onClick={handleReadNow}>
-                read now
+                Read Now
               </button>
             </div>
           </div>
