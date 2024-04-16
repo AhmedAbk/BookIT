@@ -9,7 +9,7 @@ function GetAllCity() {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/allcitiees');
+        const response = await fetch('http://localhost:3001/api/books');
         if (response.ok) {
           const data = await response.json();
           setCities(data);
@@ -110,9 +110,9 @@ function GetAllCity() {
               </div>
             ) : (
               <div>
-                <strong>{city.name}</strong>
+                <strong>{city.bname}</strong>
                 <br />
-                <img src={city.image} alt={city.name} className="img-fluid" style={{ maxWidth: '200px' }} />
+                <img src={city.bimage} alt={city.name} className="img-fluid" style={{ maxWidth: '100px' }} />
               </div>
             )}
             <div>
