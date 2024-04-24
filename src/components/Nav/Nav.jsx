@@ -6,7 +6,6 @@ function Nav() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the localStorage contains the key indicating user login
     const userData = localStorage.getItem('userData');
     if (userData) {
       setIsLoggedIn(true);
@@ -16,11 +15,8 @@ function Nav() {
   }, []);
 
   const handleLogout = () => {
-    // Remove user data from localStorage
     localStorage.removeItem('userData');
-    // Update isLoggedIn state
     setIsLoggedIn(false);
-    // Redirect user to the home page
     navigate('/');
   };
 
@@ -42,9 +38,11 @@ function Nav() {
 
             <div className="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
               <ul className="navbar-nav ml-auto py-0">
-                <li className="nav-item nav-link">
-                  <Link to="/Cart">Cart</Link>
-                </li>
+                {isLoggedIn && (
+                  <li className="nav-item nav-link">
+                    <Link to="/Cart">Cart</Link>
+                  </li>
+                )}
                 <li className="nav-item nav-link">
                   <Link to="/Pack">Books</Link>
                 </li>
@@ -53,13 +51,11 @@ function Nav() {
                 </li>
                 <li className="nav-item nav-link">
                   {isLoggedIn ? (
-                    <Link to="/"  onClick={handleLogout}>
+                    <Link to="/" onClick={handleLogout}>
                       Logout
                     </Link>
                   ) : (
-                    <Link to="/Login"  >
-                      Login
-                    </Link>
+                    <Link to="/Login">Login</Link>
                   )}
                 </li>
               </ul>

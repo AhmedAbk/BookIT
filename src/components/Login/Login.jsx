@@ -67,7 +67,7 @@ function Login() {
   return (
     <div>
       <ToastContainer />
-      <div className="container-fluid bg-registration py-5" style={{ margin: '90px 0' }}>
+      <div className="container-fluid bg-registration py-5 " style={{ margin: '90px 0', backgroundImage: `url(https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="container py-5">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-5 mb-lg-0">

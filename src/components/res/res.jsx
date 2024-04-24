@@ -3,82 +3,88 @@ import React, { useState, useEffect } from 'react';
 function Res() {
   const [formData, setFormData] = useState({
     full_name: '',
-    nb_person: 0,
-    start_date: '',
-    end_date: '',
-    price: 0,
-    city_id: 0
+    nb_books: 0,
+    bprice: 0,
+    bid: 0,
+    loc: '',
+    pay: 'Visa' // Default payment method
   });
 
-  const [cities, setCities] = useState([]);
+  const [Books, setBooks] = useState([]);
 
   useEffect(() => { 
-    fetchCities();
+    fetchBooks();
   }, []); 
 
-  const fetchCities = async () => {
+  const fetchBooks = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/allcitiees');
+      const response = await fetch('http://localhost:3001/api/books');
       if (!response.ok) {
-        throw new Error('Failed to fetch cities');
+        throw new Error('Failed to fetch Books');
       }
-      const citiesData = await response.json();
-      setCities(citiesData);
+      const BooksData = await response.json();
+      setBooks(BooksData);
     } catch (error) {
-      console.error('Error fetching cities:', error);
+      console.error('Error fetching Books:', error);
     }
   };
 
-  const handleCityChange = (e) => {
-    const selectedCityId = parseInt(e.target.value);
-    const selectedCity = cities.find(city => city.id === selectedCityId);
-    if (selectedCity) {
-      setFormData({ ...formData, city_id: selectedCityId, price: selectedCity.prices });
+  const handlebookChange = (e) => {
+    const selectedbookId = parseInt(e.target.value);
+    const selectedbook = Books.find(book => book.bid === selectedbookId);
+    if (selectedbook) {
+      setFormData({ ...formData, bid: selectedbookId, price: selectedbook.bprice }); 
     }
   };
+  
 
-  const handleReservation = async (event) => {
+  const handleOrder = async (event) => {
     event.preventDefault();
     try {
-      const totalPrice = formData.price * formData.nb_person;
+      const totalPrice = formData.bprice * formData.nb_books; 
       const dataToSend = { ...formData, price: totalPrice };
-      const response = await fetch('http://localhost:3001/api/reservations', {
+      const response = await fetch('http://localhost:3001/api/order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(dataToSend)
       });
-
+  
       if (!response.ok) {
-        throw new Error('Failed to submit reservation');
+        throw new Error('Failed to submit an order');
       } 
       setFormData({
         full_name: '',
-        nb_person: 0,
-        start_date: '',
-        end_date: '',
-        price: 0,
-        city_id: 0
+        nb_books: 0,
+        bprice: 0, 
+        bid: 0,
+        loc: '',
+        pay: 'Visa' 
       });
-
-      alert('Reservation submitted successfully!');
+  
+      alert('Order submitted successfully!');
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to submit reservation. Please try again.');
+      alert('Failed to submit Order. Please try again.');
     }
   };
+  
 
   const handlePersonChange = (e) => {
-    const nb_person = parseInt(e.target.value);
-    const totalPrice = formData.price * nb_person;
-    setFormData({ ...formData, nb_person, price: totalPrice });
+    const nb_books = parseInt(e.target.value);
+    const totalPrice = formData.bprice * nb_books;
+    setFormData({ ...formData, nb_books, price: totalPrice });
+  };
+
+  const handlePaymentMethodChange = (e) => {
+    setFormData({ ...formData, pay: e.target.value });
   };
 
   return (
     <div className="container mt-5">
-      <h2>Reservation Form</h2>
-      <form onSubmit={handleReservation}>
+      <h2>Order Form</h2>
+      <form onSubmit={handleOrder}>
         <div className="mb-3">
           <label htmlFor="full_name" className="form-label">Full Name</label>
           <input
@@ -91,37 +97,29 @@ function Res() {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="nb_person" className="form-label">Number of Persons</label>
+          <label htmlFor="id" className="form-label">Choose a book</label>
+          <select
+            className="form-select"
+            id="bid"
+            value={formData.bid}
+            onChange={handlebookChange}
+          >
+            <option value={0}>Select a book</option>
+            {Books.map(book => (
+              <option key={book.bid} value={book.bid}>{book.bname}</option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="nb_books" className="form-label">Number of Books</label>
           <input
             type="number"
             className="form-control"
-            id="nb_person"
-            value={formData.nb_person}
+            id="nb_books"
+            value={formData.nb_books}
             onChange={handlePersonChange}
-            placeholder="Enter Number of Persons"
+            placeholder="Enter Number of books"
           />
-        </div>
-        <div className="row">
-          <div className="col-md-6 mb-3">
-            <label htmlFor="start_date" className="form-label">Start Date</label>
-            <input
-              type="date"
-              className="form-control"
-              id="start_date"
-              value={formData.start_date}
-              onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-            />
-          </div>
-          <div className="col-md-6 mb-3">
-            <label htmlFor="end_date" className="form-label">End Date</label>
-            <input
-              type="date"
-              className="form-control"
-              id="end_date"
-              value={formData.end_date}
-              onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-            />
-          </div>
         </div>
         <div className="mb-3">
           <label htmlFor="price" className="form-label">Price</label>
@@ -129,26 +127,37 @@ function Res() {
             type="number"
             className="form-control"
             id="price"
-            value={formData.price}
+            value={formData.bprice}
             onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
             placeholder="Enter Price"
             disabled
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="city_id" className="form-label">City</label>
+          <label htmlFor="loc" className="form-label">Shipping Location</label>
+          <input
+            type="text"
+            className="form-control"
+            id="loc"
+            value={formData.loc}
+            onChange={(e) => setFormData({ ...formData, loc: e.target.value })}
+            placeholder="Enter Shipping Location"
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="pay" className="form-label">Choose a payment method</label>
           <select
             className="form-select"
-            id="city_id"
-            value={formData.city_id}
-            onChange={handleCityChange}
+            id="pay"
+            value={formData.pay}
+            onChange={handlePaymentMethodChange}
           >
-            <option value={0}>Select a city</option>
-            {cities.map(city => (
-              <option key={city.id} value={city.id}>{city.name}</option>
-            ))}
+            <option value="Visa">Visa</option>
+            <option value="Paypal">Paypal</option>
+            <option value="On arrival">On arrival</option>
           </select>
         </div>
+     
 
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>

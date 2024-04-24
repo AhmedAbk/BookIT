@@ -177,7 +177,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
- 
+ //login
 app.get('/api/user/:email', async (req, res) => {
   try {
     const { email } = req.params;
@@ -192,5 +192,25 @@ app.get('/api/user/:email', async (req, res) => {
   } catch (error) {
     console.error('Error fetching user data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+//commande
+app.post('/api/order', async (req, res) => {
+  try { 
+    const { full_name, nb_books, price, loc, pay, bid } = req.body;
+    // Insert order into the database
+    const query = `
+      INSERT INTO orders (full_name, nb_books, price, loc, pay, bid)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *;
+    `;
+    const values = [full_name, nb_books, price, loc, pay, bid]; // Include price
+
+    const result = await pool.query(query, values);
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error inserting order:', error);
+    res.status(500).json({ error: 'Failed to insert order' });
   }
 });

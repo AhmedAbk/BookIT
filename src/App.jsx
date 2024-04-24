@@ -16,6 +16,8 @@ import GetAllDestinations from './components/admin/getalldest.jsx';
 import GetAllcity from './components/admin/getallcity.jsx';
 import Res from './components/res/res.jsx';
 import GetAllUsers from './components/admin/Users.jsx'; 
+import About from './components/About us/about.jsx';
+import Contact from './components/Contact/Contact.jsx';
 const routes = [
   { path: '/', element: <Home /> },
   { path: '/Pack', element: <Pack /> },
@@ -28,6 +30,8 @@ const routes = [
   { path: "/GetAllDest", element: <GetAllDestinations/>}, 
   {path: "/GetAllCity", element: <GetAllcity/>},
   {path: "/res", element: <Res/>},
+  {path: "/About", element: <About/>},
+  {path: "/Contact", element: <Contact/>},
   {path: "/Users", element: <GetAllUsers/>}
 ];
 
